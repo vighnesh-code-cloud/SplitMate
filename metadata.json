@@ -1,0 +1,6 @@
+{
+  "name": "SplitMate",
+  "description": "Break the bill, not the bond. Premium expense-splitting web app for groups and friends.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
