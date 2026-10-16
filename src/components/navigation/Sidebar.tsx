@@ -9,7 +9,8 @@ import {
   Plus,
   ArrowLeft,
   ExternalLink,
-  LogOut
+  LogOut,
+  Sparkles
 } from 'lucide-react';
 import { SplitMateLogo } from '../common/SplitMateLogo';
 import { useSplitMate } from '../../context/SplitMateContext';
@@ -27,8 +28,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { currentPage, navigateTo, currentUser, groups, session, signOut } = useSplitMate();
 
-  const navItems: { id: NavigationPage; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+  const navItems: { id: NavigationPage; label: string; icon: React.ComponentType<{ className?: string }>; badge?: string }[] = [
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
+    { id: 'assistant', label: 'SplitMate AI', icon: Sparkles, badge: 'AI' },
     { id: 'groups', label: 'My Groups', icon: Users2 },
     { id: 'friends', label: 'Friends', icon: UserCheck },
     { id: 'activity', label: 'Activity', icon: ActivityIcon },
@@ -84,12 +86,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'text-[#A0A5AE] hover:text-[#F5F5F5] hover:bg-[#181B20]/60'
               }`}
             >
-              <Icon
-                className={`w-4 h-4 transition-colors ${
-                  isActive ? 'text-[#8FAF9A]' : 'text-[#737984]'
-                }`}
-              />
-              <span>{item.label}</span>
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <Icon
+                  className={`w-4 h-4 transition-colors shrink-0 ${
+                    isActive ? 'text-[#8FAF9A]' : 'text-[#737984]'
+                  }`}
+                />
+                <span className="truncate">{item.label}</span>
+              </div>
+              {item.badge && (
+                <span className="px-1.5 py-0.5 rounded-md text-[9px] font-black bg-[#8FAF9A]/20 text-[#8FAF9A] border border-[#8FAF9A]/30 tracking-wider">
+                  {item.badge}
+                </span>
+              )}
             </button>
           );
         })}
