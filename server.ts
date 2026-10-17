@@ -1,4 +1,5 @@
 import express from 'express';
+import http from 'http';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -9,6 +10,50 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function listenWithPortFallback(
+  app: express.Express,
+  initialPort: number,
+  host: string
+): Promise<{ server: http.Server; port: number }> {
+  return new Promise((resolve, reject) => {
+    let currentPort = initialPort;
+    const maxRetries = 10;
+    let attempts = 0;
+
+    function tryListen() {
+      const server = http.createServer(app);
+
+      server.once('listening', () => {
+        resolve({ server, port: currentPort });
+      });
+
+      server.once('error', (err: any) => {
+        if (err.code === 'EADDRINUSE') {
+          if (attempts < maxRetries) {
+            attempts++;
+            const nextPort = currentPort + 1;
+            console.warn(`[SplitMate] Port ${currentPort} is in use. Retrying on port ${nextPort}...`);
+            currentPort = nextPort;
+            tryListen();
+          } else {
+            reject(
+              new Error(
+                `Ports ${initialPort} through ${currentPort} are all currently occupied. Please free up a port or configure PORT in your environment.`
+              )
+            );
+          }
+        } else {
+          reject(err);
+        }
+      });
+
+      server.listen(currentPort, host);
+    }
+
+    tryListen();
+  });
+}
 
 async function startServer() {
   const app = express();
@@ -79,12 +124,39 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`SplitMate application running at http://0.0.0.0:${PORT}`);
-  });
+  try {
+    const { port: boundPort } = await listenWithPortFallback(app, PORT, '0.0.0.0');
+
+    const localUrl = `http://localhost:${boundPort}`;
+    const apiUrl = `http://localhost:${boundPort}/api`;
+    const ollamaUrl = process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
+    const ollamaModel = process.env.OLLAMA_MODEL || 'gemma3:4b';
+
+    console.log('\n');
+    console.log('  ==============================================================');
+    console.log('   SplitMate — Expense Splitting & AI Assistant Development Server');
+    console.log('  ==============================================================');
+    console.log('');
+    console.log(`   ➜  Frontend (Web App):   ${localUrl}`);
+    console.log(`   ➜  Backend API Base:     ${apiUrl}`);
+    console.log(`   ➜  API Health Check:     ${apiUrl}/health`);
+    console.log(`   ➜  AI Assistant Status:  ${apiUrl}/assistant/status`);
+    console.log('');
+    console.log(`   AI Engine: Gemma 3 4B via Ollama (${ollamaModel} @ ${ollamaUrl})`);
+    console.log('   (Note: Ollama is optional for core features; runs locally if active)');
+    console.log('  ==============================================================\n');
+  } catch (err: any) {
+    console.error('\n[SplitMate] Fatal error starting development server:');
+    console.error(err?.message || err);
+    console.error('\nTroubleshooting tips:');
+    console.error(' 1. Check if another instance of SplitMate is already running.');
+    console.error(' 2. Verify that you have permissions to bind to network interfaces.');
+    console.error(' 3. Run with PORT=3001 npm run dev to force a different port.\n');
+    process.exit(1);
+  }
 }
 
 startServer().catch((err) => {
-  console.error('Failed to initialize SplitMate server:', err);
+  console.error('[SplitMate] Fatal initialization failure:', err);
   process.exit(1);
 });
