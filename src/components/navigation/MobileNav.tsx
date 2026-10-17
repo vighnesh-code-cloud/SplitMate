@@ -11,6 +11,7 @@ import {
   Settings,
   ArrowLeft,
   LogOut,
+  Bot,
 } from 'lucide-react';
 import { SplitMateLogo } from '../common/SplitMateLogo';
 import { useSplitMate } from '../../context/SplitMateContext';
@@ -49,6 +50,15 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         <SplitMateLogo size="sm" onClick={() => handleNav('landing')} />
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => handleNav('assistant')}
+            className="p-1.5 rounded-lg bg-[#202329] border border-[#2B2F36] text-[#8FAF9A] hover:bg-[#8FAF9A]/20 transition-colors"
+            title="SplitMate AI Assistant"
+            aria-label="SplitMate AI Assistant"
+          >
+            <Bot className="w-4 h-4" />
+          </button>
+
           <button
             onClick={onOpenAddExpense}
             className="px-2.5 py-1.5 rounded-lg bg-[#8FAF9A] text-[#0B0C0E] text-xs font-bold flex items-center gap-1 shadow-sm"
@@ -118,6 +128,23 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                   </button>
                 );
               })}
+
+              <button
+                onClick={() => handleNav('assistant')}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                  currentPage === 'assistant'
+                    ? 'bg-[#181B20] text-[#8FAF9A]'
+                    : 'text-[#A0A5AE] hover:text-[#F5F5F5]'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Bot className="w-4 h-4 text-[#8FAF9A]" />
+                  <span>SplitMate AI</span>
+                </div>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-black bg-[#8FAF9A]/20 text-[#8FAF9A] border border-[#8FAF9A]/30">
+                  Gemma 3
+                </span>
+              </button>
 
               <button
                 onClick={() => handleNav('settings')}

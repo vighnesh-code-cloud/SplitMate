@@ -9,7 +9,8 @@ import {
   Plus,
   ArrowLeft,
   ExternalLink,
-  LogOut
+  LogOut,
+  Bot,
 } from 'lucide-react';
 import { SplitMateLogo } from '../common/SplitMateLogo';
 import { useSplitMate } from '../../context/SplitMateContext';
@@ -29,6 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const navItems: { id: NavigationPage; label: string; icon: React.ComponentType<{ className?: string }>; badge?: string }[] = [
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
+    { id: 'assistant', label: 'SplitMate AI', icon: Bot, badge: 'Gemma 3' },
     { id: 'groups', label: 'My Groups', icon: Users2 },
     { id: 'friends', label: 'Friends', icon: UserCheck },
     { id: 'activity', label: 'Activity', icon: ActivityIcon },

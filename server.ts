@@ -3,6 +3,8 @@ import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { checkOllamaHealth, processAssistantChat } from './src/server/aiService';
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +22,47 @@ async function startServer() {
       status: 'ok',
       service: 'SplitMate Server',
     });
+  });
+
+  // Assistant status endpoint (checks Ollama & Gemma 3 4B health)
+  app.get('/api/assistant/status', async (req, res) => {
+    try {
+      const status = await checkOllamaHealth();
+      res.json(status);
+    } catch (err: any) {
+      res.status(503).json({
+        available: false,
+        provider: 'ollama',
+        model: process.env.OLLAMA_MODEL || 'gemma3:4b',
+        baseUrl: process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434',
+        error: err?.message || 'Failed to check Ollama health',
+      });
+    }
+  });
+
+  // Assistant chat endpoint
+  app.post('/api/assistant/chat', async (req, res) => {
+    try {
+      const { messages, userId, workspaceData } = req.body;
+      if (!messages || !Array.isArray(messages) || !userId || !workspaceData) {
+        return res.status(400).json({
+          error: 'Missing required parameters: messages, userId, or workspaceData',
+        });
+      }
+
+      const response = await processAssistantChat({
+        messages,
+        userId,
+        workspaceData,
+      });
+
+      res.json(response);
+    } catch (err: any) {
+      console.error('Error in /api/assistant/chat:', err?.message);
+      res.status(503).json({
+        error: err?.message || 'Gemma 3 4B via Ollama is unavailable.',
+      });
+    }
   });
 
   // Serve with Vite in development or static files in production

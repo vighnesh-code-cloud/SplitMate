@@ -10,6 +10,7 @@ import { FriendsPage } from './components/friends/FriendsPage';
 import { ActivityPage } from './components/activity/ActivityPage';
 import { ExpenseHistoryPage } from './components/history/ExpenseHistoryPage';
 import { SettingsPage } from './components/settings/SettingsPage';
+import { AssistantPage } from './components/assistant/AssistantPage';
 import { CreateGroupModal } from './components/groups/CreateGroupModal';
 import { AddExpenseModal } from './components/expenses/AddExpenseModal';
 import { SettleUpModal } from './components/settlements/SettleUpModal';
@@ -17,6 +18,7 @@ import { ExpenseDetailModal } from './components/expenses/ExpenseDetailModal';
 import { ConfirmModal } from './components/common/ConfirmModal';
 import { ToastContainer } from './components/common/Toast';
 import { SplitMateLogo } from './components/common/SplitMateLogo';
+import { Bot } from 'lucide-react';
 import { Expense } from './types';
 
 function SplitMateApp() {
@@ -154,6 +156,10 @@ function SplitMateApp() {
         )}
 
         {currentPage === 'settings' && <SettingsPage />}
+
+        {currentPage === 'assistant' && (
+          <AssistantPage onOpenSettleUp={handleOpenSettleUp} />
+        )}
       </main>
 
       {/* Global Modals */}
@@ -213,6 +219,21 @@ function SplitMateApp() {
       />
 
 
+
+      {/* Floating SplitMate AI Quick Trigger */}
+      {currentPage !== 'assistant' && (
+        <button
+          onClick={() => navigateTo('assistant')}
+          className="fixed bottom-20 lg:bottom-6 right-5 z-40 px-3.5 py-2.5 rounded-full bg-[#181B20] hover:bg-[#202329] border border-[#8FAF9A]/40 text-[#8FAF9A] text-xs font-bold shadow-xl flex items-center gap-2 transition-transform hover:scale-105 cursor-pointer backdrop-blur-md"
+          aria-label="Open SplitMate AI Assistant"
+        >
+          <Bot className="w-4 h-4 text-[#8FAF9A]" />
+          <span className="hidden sm:inline text-white">SplitMate AI</span>
+          <span className="px-1.5 py-0.5 rounded text-[9px] bg-[#8FAF9A]/20 text-[#8FAF9A] font-black">
+            Gemma 3
+          </span>
+        </button>
+      )}
 
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemove={removeToast} />

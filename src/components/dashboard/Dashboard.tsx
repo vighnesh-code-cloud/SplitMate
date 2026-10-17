@@ -12,7 +12,8 @@ import {
   ChevronRight,
   ShieldCheck,
   CheckCircle2,
-  Calendar
+  Calendar,
+  Bot,
 } from 'lucide-react';
 import { useSplitMate } from '../../context/SplitMateContext';
 import {
@@ -227,6 +228,36 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* SplitMate AI Assistant Spotlight */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#181B20] border border-[#2B2F36] hover:border-[#8FAF9A]/40 transition-colors shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#8FAF9A]/15 border border-[#8FAF9A]/30 flex items-center justify-center text-[#8FAF9A] shrink-0">
+            <Bot className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm sm:text-base font-bold text-[#F5F5F5]">
+                SplitMate AI Assistant
+              </h2>
+              <span className="text-[10px] font-bold text-[#8FAF9A] bg-[#8FAF9A]/15 border border-[#8FAF9A]/25 px-2 py-0.5 rounded-md">
+                Gemma 3 4B
+              </span>
+            </div>
+            <p className="text-xs text-[#A0A5AE] mt-0.5">
+              Ask questions like &quot;Who owes whom?&quot;, &quot;How much did I spend this month?&quot;, or request group summaries.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => navigateTo('assistant')}
+          className="px-4 py-2 rounded-xl bg-[#8FAF9A] text-[#0B0C0E] hover:bg-[#82B99A] font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0 self-start sm:self-auto"
+        >
+          <span>Open Assistant</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </button>
       </div>
 
       {/* Pending Balances & Settlements Notice if any */}
