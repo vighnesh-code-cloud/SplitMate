@@ -10,11 +10,9 @@ import { FriendsPage } from './components/friends/FriendsPage';
 import { ActivityPage } from './components/activity/ActivityPage';
 import { ExpenseHistoryPage } from './components/history/ExpenseHistoryPage';
 import { SettingsPage } from './components/settings/SettingsPage';
-import { AssistantPage } from './components/assistant/AssistantPage';
 import { CreateGroupModal } from './components/groups/CreateGroupModal';
 import { AddExpenseModal } from './components/expenses/AddExpenseModal';
 import { SettleUpModal } from './components/settlements/SettleUpModal';
-import { Sparkles } from 'lucide-react';
 import { ExpenseDetailModal } from './components/expenses/ExpenseDetailModal';
 import { ConfirmModal } from './components/common/ConfirmModal';
 import { ToastContainer } from './components/common/Toast';
@@ -156,10 +154,6 @@ function SplitMateApp() {
         )}
 
         {currentPage === 'settings' && <SettingsPage />}
-
-        {currentPage === 'assistant' && (
-          <AssistantPage onOpenSettleUp={handleOpenSettleUp} />
-        )}
       </main>
 
       {/* Global Modals */}
@@ -218,21 +212,7 @@ function SplitMateApp() {
         }}
       />
 
-      {/* Floating SplitMate AI Quick Trigger */}
-      {currentPage !== 'assistant' && (
-        <button
-          onClick={() => navigateTo('assistant')}
-          className="fixed bottom-20 lg:bottom-6 right-5 z-40 px-3.5 py-2.5 rounded-full bg-[#181B20] hover:bg-[#202329] border border-[#8FAF9A]/50 text-[#F5F5F5] hover:text-[#8FAF9A] text-xs font-bold flex items-center gap-2 shadow-xl hover:shadow-[#8FAF9A]/10 transition-all cursor-pointer group"
-          title="Open SplitMate AI Assistant"
-          aria-label="SplitMate AI Assistant"
-        >
-          <div className="w-5 h-5 rounded-full bg-[#8FAF9A]/20 flex items-center justify-center text-[#8FAF9A] group-hover:scale-110 transition-transform">
-            <Sparkles className="w-3.5 h-3.5" />
-          </div>
-          <span>SplitMate AI</span>
-          <span className="w-2 h-2 rounded-full bg-[#8FAF9A] animate-pulse" />
-        </button>
-      )}
+
 
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemove={removeToast} />

@@ -12,8 +12,7 @@ import {
   ChevronRight,
   ShieldCheck,
   CheckCircle2,
-  Calendar,
-  Sparkles
+  Calendar
 } from 'lucide-react';
 import { useSplitMate } from '../../context/SplitMateContext';
 import {

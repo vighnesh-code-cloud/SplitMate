@@ -7,7 +7,6 @@ import {
   Trash2,
   Check,
   Palette,
-  Sparkles,
   Info,
   Shuffle,
   LogOut

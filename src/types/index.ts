@@ -113,5 +113,4 @@ export type NavigationPage =
   | 'friends'
   | 'activity'
   | 'history'
-  | 'settings'
-  | 'assistant';
+  | 'settings';
