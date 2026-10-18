@@ -322,7 +322,6 @@ CAPABILITIES AND BEHAVIOR:
     const ollamaPayload: any = {
       model: OLLAMA_MODEL,
       messages: ollamaMessages,
-      tools: OLLAMA_TOOLS,
       stream: false,
       options: {
         temperature: 0.2,
